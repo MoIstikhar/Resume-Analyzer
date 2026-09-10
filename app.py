@@ -1,4 +1,5 @@
 import os
+from dotenv import load_dotenv
 
 from flask import (
     Flask,
@@ -35,6 +36,10 @@ from analyzer.recommendation import get_recommendations
 from analyzer.job_api import search_jobs
 
 
+# Load environment variables
+load_dotenv()
+
+
 # ==========================================
 # Flask App
 # ==========================================
@@ -46,9 +51,13 @@ app = Flask(__name__)
 # Configuration
 # ==========================================
 
-app.config["SECRET_KEY"] = "my-secret-key"
+app.config["SECRET_KEY"] = os.getenv(
+    "SECRET_KEY",
+    "dev-secret-key"
+)
 
-app.config["SQLALCHEMY_DATABASE_URI"] = (
+app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv(
+    "DATABASE_URL",
     "mysql+pymysql://root:password@localhost/ai_resume_db"
 )
 
