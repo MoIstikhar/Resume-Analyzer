@@ -6,5 +6,5 @@ PyMuPDF
 python-docx
 scikit-learn
 python-dotenv
-python-dotenv
 requests
+gunicorn
