@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}
+Upload Resume | Resume AI
+{% endblock %}
+
+
+{% block body %}
+
+<div class="container py-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-8">
+
+            <div class="form-card text-center">
+
+                <h1 class="fw-bold">
+                    Upload Your Resume
+                </h1>
+
+                <p class="text-muted">
+
+                    Upload PDF or DOCX
+
+                </p>
+
+
+                <form
+                    method="POST"
+                    enctype="multipart/form-data">
+
+                    <input
+                        type="file"
+                        name="resume"
+                        accept=".pdf,.docx"
+                        class="form-control form-control-lg mb-4"
+                        required>
+
+
+                    <button
+                        class="btn btn-dark btn-lg px-5">
+
+                        Analyze Resume
+
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

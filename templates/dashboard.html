@@ -1,0 +1,472 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Dashboard - ResumeAI
+{% endblock %}
+
+
+{% block body %}
+
+<div class="container mt-5">
+
+
+    <!-- Welcome -->
+
+    <div class="mb-4">
+
+        <h1>
+            Welcome, {{ current_user.name }} 👋
+        </h1>
+
+        <p class="text-muted">
+            Manage your resumes and view your AI job matching results.
+        </p>
+
+    </div>
+
+
+
+    <!-- Dashboard Statistics -->
+
+    <div class="row mb-4">
+
+
+        <!-- Total Resumes -->
+
+        <div class="col-md-4 mb-3">
+
+            <div class="card shadow-sm h-100">
+
+                <div class="card-body">
+
+                    <h5>
+                        Total Resumes
+                    </h5>
+
+                    <h2 class="text-primary">
+                        {{ resumes|length }}
+                    </h2>
+
+                    <p class="text-muted">
+                        Resumes uploaded by you
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- Total Analyses -->
+
+        <div class="col-md-4 mb-3">
+
+            <div class="card shadow-sm h-100">
+
+                <div class="card-body">
+
+                    <h5>
+                        Total Analyses
+                    </h5>
+
+                    <h2 class="text-success">
+                        {{ analyses|length }}
+                    </h2>
+
+                    <p class="text-muted">
+                        Job matching analyses
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- Upload -->
+
+        <div class="col-md-4 mb-3">
+
+            <div class="card shadow-sm h-100">
+
+                <div class="card-body">
+
+                    <h5>
+                        Upload New Resume
+                    </h5>
+
+                    <p class="text-muted">
+                        Upload another resume for analysis.
+                    </p>
+
+                    <a
+                        href="{{ url_for('upload') }}"
+                        class="btn btn-primary"
+                    >
+                        Upload Resume
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- My Resumes -->
+
+    <div class="card shadow-sm mb-5">
+
+        <div class="card-header bg-primary text-white">
+
+            <h4 class="mb-0">
+                My Resumes
+            </h4>
+
+        </div>
+
+
+        <div class="card-body">
+
+
+            {% if resumes %}
+
+                <div class="row">
+
+
+                    {% for resume in resumes %}
+
+                        <div class="col-md-6 mb-4">
+
+                            <div class="card h-100 shadow-sm">
+
+                                <div class="card-body">
+
+
+                                    <!-- Resume Icon -->
+
+                                    <div
+                                        style="font-size: 45px;"
+                                    >
+                                        📄
+                                    </div>
+
+
+                                    <!-- Filename -->
+
+                                    <h5 class="mt-3">
+
+                                        {{ resume.filename }}
+
+                                    </h5>
+
+
+                                    <!-- Upload Date -->
+
+                                    <p class="text-muted">
+
+                                        Uploaded:
+
+                                        {{ resume.uploaded_at }}
+
+                                    </p>
+
+
+                                    <!-- Skills -->
+
+                                    {% if resume.skills %}
+
+                                        <p class="mb-2">
+
+                                            <strong>
+                                                Detected Skills:
+                                            </strong>
+
+                                        </p>
+
+
+                                        <div class="mb-3">
+
+                                            {% for skill in resume.skills.split(',') %}
+
+                                                <span
+                                                    class="badge bg-secondary me-1 mb-1"
+                                                >
+                                                    {{ skill.strip() }}
+                                                </span>
+
+                                            {% endfor %}
+
+                                        </div>
+
+                                    {% endif %}
+
+
+
+                                    <!-- Buttons -->
+
+                                    <div class="mt-3">
+
+
+                                        <!-- View Analysis -->
+
+                                        <a
+                                            href="{{ url_for('result', resume_id=resume.id) }}"
+                                            class="btn btn-primary btn-sm"
+                                        >
+                                            View Analysis
+                                        </a>
+
+
+
+                                        <!-- Delete Resume -->
+
+                                        <form
+                                            action="{{ url_for('delete_resume', resume_id=resume.id) }}"
+                                            method="POST"
+                                            style="display: inline;"
+                                            onsubmit="return confirm('Are you sure you want to delete this resume?');"
+                                        >
+
+                                            <button
+                                                type="submit"
+                                                class="btn btn-danger btn-sm"
+                                            >
+                                                Delete Resume
+                                            </button>
+
+                                        </form>
+
+                                    </div>
+
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+
+            {% else %}
+
+
+                <!-- No Resume -->
+
+                <div class="text-center py-5">
+
+                    <div
+                        style="font-size: 60px;"
+                    >
+                        📄
+                    </div>
+
+                    <h4 class="mt-3">
+                        No Resume Uploaded
+                    </h4>
+
+                    <p class="text-muted">
+                        Upload your first resume to start analysis.
+                    </p>
+
+                    <a
+                        href="{{ url_for('upload') }}"
+                        class="btn btn-primary"
+                    >
+                        Upload Resume
+                    </a>
+
+                </div>
+
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+
+    <!-- Analysis History -->
+
+    <div class="card shadow-sm mb-5">
+
+        <div class="card-header bg-success text-white">
+
+            <h4 class="mb-0">
+                Analysis History
+            </h4>
+
+        </div>
+
+
+        <div class="card-body">
+
+
+            {% if analyses %}
+
+                <div class="table-responsive">
+
+                    <table class="table table-bordered table-hover">
+
+                        <thead class="table-light">
+
+                            <tr>
+
+                                <th>
+                                    #
+                                </th>
+
+                                <th>
+                                    Resume ID
+                                </th>
+
+                                <th>
+                                    Job ID
+                                </th>
+
+                                <th>
+                                    Match Score
+                                </th>
+
+                                <th>
+                                    Matched Skills
+                                </th>
+
+                                <th>
+                                    Missing Skills
+                                </th>
+
+                                <th>
+                                    Date
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            {% for analysis in analyses %}
+
+                                <tr>
+
+                                    <td>
+                                        {{ loop.index }}
+                                    </td>
+
+                                    <td>
+                                        {{ analysis.resume_id }}
+                                    </td>
+
+                                    <td>
+                                        {{ analysis.job_id }}
+                                    </td>
+
+                                    <td>
+
+                                        {% if analysis.score >= 70 %}
+
+                                            <span class="badge bg-success">
+                                                {{ "%.2f"|format(analysis.score) }}%
+                                            </span>
+
+                                        {% elif analysis.score >= 40 %}
+
+                                            <span class="badge bg-warning text-dark">
+                                                {{ "%.2f"|format(analysis.score) }}%
+                                            </span>
+
+                                        {% else %}
+
+                                            <span class="badge bg-danger">
+                                                {{ "%.2f"|format(analysis.score) }}%
+                                            </span>
+
+                                        {% endif %}
+
+                                    </td>
+
+
+                                    <td>
+
+                                        {% if analysis.matched_skills %}
+
+                                            {{ analysis.matched_skills }}
+
+                                        {% else %}
+
+                                            <span class="text-muted">
+                                                None
+                                            </span>
+
+                                        {% endif %}
+
+                                    </td>
+
+
+                                    <td>
+
+                                        {% if analysis.missing_skills %}
+
+                                            {{ analysis.missing_skills }}
+
+                                        {% else %}
+
+                                            <span class="text-muted">
+                                                None
+                                            </span>
+
+                                        {% endif %}
+
+                                    </td>
+
+
+                                    <td>
+
+                                        {{ analysis.created_at }}
+
+                                    </td>
+
+                                </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+
+            {% else %}
+
+                <div class="text-center py-4">
+
+                    <p class="text-muted">
+                        No analysis history available.
+                    </p>
+
+                </div>
+
+            {% endif %}
+
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

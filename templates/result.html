@@ -1,0 +1,491 @@
+{% extends "base.html" %}
+
+{% block title %}
+Resume Analysis
+{% endblock %}
+
+
+{% block body %}
+
+<div class="container py-5">
+
+    <!-- ============================= -->
+    <!-- Resume Header -->
+    <!-- ============================= -->
+
+    <div class="mb-4">
+
+        <h1 class="fw-bold">
+            Resume Analysis
+        </h1>
+
+        <p class="text-muted">
+            {{ resume.filename }}
+        </p>
+
+    </div>
+
+
+    <!-- ============================= -->
+    <!-- Detected Skills -->
+    <!-- ============================= -->
+
+    <div class="card shadow-sm mb-5">
+
+        <div class="card-body">
+
+            <h3 class="mb-4">
+                Detected Skills
+            </h3>
+
+
+            {% if resume.skills %}
+
+                <div class="d-flex flex-wrap gap-2">
+
+                    {% for skill in resume.skills.split(",") %}
+
+                        {% if skill.strip() %}
+
+                            <span class="badge bg-primary p-2">
+
+                                {{ skill.strip() }}
+
+                            </span>
+
+                        {% endif %}
+
+                    {% endfor %}
+
+                </div>
+
+            {% else %}
+
+                <p class="text-muted">
+                    No skills detected.
+                </p>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+    <!-- ============================= -->
+    <!-- Job Matches -->
+    <!-- ============================= -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <h2 class="fw-bold">
+            Job Matches
+        </h2>
+
+        <span class="badge bg-dark">
+            {{ results|length }} Jobs
+        </span>
+
+    </div>
+
+
+    {% if results %}
+
+        {% for result in results %}
+
+            <div class="card shadow-sm mb-4">
+
+                <div class="card-body p-4">
+
+
+                    <!-- ============================= -->
+                    <!-- Job Header -->
+                    <!-- ============================= -->
+
+                    <div class="row">
+
+                        <div class="col-md-8">
+
+                            <h3 class="fw-bold">
+
+                                {{ result.job.title }}
+
+                            </h3>
+
+
+                            <p class="text-muted mb-3">
+
+                                <strong>
+                                    {{ result.job.company }}
+                                </strong>
+
+                                {% if result.job.location %}
+
+                                    · {{ result.job.location }}
+
+                                {% endif %}
+
+                            </p>
+
+                        </div>
+
+
+                        <!-- ============================= -->
+                        <!-- Match Score -->
+                        <!-- ============================= -->
+
+                        <div class="col-md-4 text-md-end">
+
+                            {% if result.score >= 75 %}
+
+                                <span class="badge bg-success fs-5 p-3">
+
+                                    {{ result.score }}%
+
+                                </span>
+
+                            {% elif result.score >= 50 %}
+
+                                <span class="badge bg-primary fs-5 p-3">
+
+                                    {{ result.score }}%
+
+                                </span>
+
+                            {% elif result.score >= 30 %}
+
+                                <span class="badge bg-warning text-dark fs-5 p-3">
+
+                                    {{ result.score }}%
+
+                                </span>
+
+                            {% else %}
+
+                                <span class="badge bg-danger fs-5 p-3">
+
+                                    {{ result.score }}%
+
+                                </span>
+
+                            {% endif %}
+
+
+                            <div class="small text-muted mt-1">
+
+                                Match Score
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <hr>
+
+
+                    <!-- ============================= -->
+                    <!-- Matched Skills -->
+                    <!-- ============================= -->
+
+                    <div class="mb-4">
+
+                        <h5 class="fw-bold">
+                            Matched Skills
+                        </h5>
+
+
+                        {% if result.matched %}
+
+                            <div class="d-flex flex-wrap gap-2">
+
+                                {% for skill in result.matched %}
+
+                                    <span class="badge bg-success p-2">
+
+                                        ✓ {{ skill }}
+
+                                    </span>
+
+                                {% endfor %}
+
+                            </div>
+
+                        {% else %}
+
+                            <p class="text-muted">
+
+                                No matching skills found.
+
+                            </p>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- ============================= -->
+                    <!-- Missing Skills -->
+                    <!-- ============================= -->
+
+                    <div class="mb-4">
+
+                        <h5 class="fw-bold">
+                            Missing Skills
+                        </h5>
+
+
+                        {% if result.missing %}
+
+                            <div class="d-flex flex-wrap gap-2">
+
+                                {% for skill in result.missing %}
+
+                                    <span class="badge bg-danger p-2">
+
+                                        + {{ skill }}
+
+                                    </span>
+
+                                {% endfor %}
+
+                            </div>
+
+                        {% else %}
+
+                            <p class="text-success">
+
+                                No major missing skills.
+
+                            </p>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- ============================= -->
+                    <!-- Match Breakdown -->
+                    <!-- ============================= -->
+
+                    <div class="mb-4">
+
+                        <h5 class="fw-bold mb-3">
+                            Match Breakdown
+                        </h5>
+
+
+                        <!-- Skills -->
+
+                        <div class="mb-3">
+
+                            <div class="d-flex justify-content-between">
+
+                                <span>
+                                    Skills Match
+                                </span>
+
+                                <strong>
+                                    {{ result.skill_score }}%
+                                </strong>
+
+                            </div>
+
+
+                            <div class="progress">
+
+                                <div
+                                    class="progress-bar bg-success"
+                                    style="width: {{ result.skill_score }}%">
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Text Similarity -->
+
+                        <div class="mb-3">
+
+                            <div class="d-flex justify-content-between">
+
+                                <span>
+                                    Resume & Job Similarity
+                                </span>
+
+                                <strong>
+                                    {{ result.text_score }}%
+                                </strong>
+
+                            </div>
+
+
+                            <div class="progress">
+
+                                <div
+                                    class="progress-bar bg-info"
+                                    style="width: {{ result.text_score }}%">
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Role Match -->
+
+                        <div class="mb-3">
+
+                            <div class="d-flex justify-content-between">
+
+                                <span>
+                                    Job Role Match
+                                </span>
+
+                                <strong>
+                                    {{ result.title_score }}%
+                                </strong>
+
+                            </div>
+
+
+                            <div class="progress">
+
+                                <div
+                                    class="progress-bar bg-warning"
+                                    style="width: {{ result.title_score }}%">
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ============================= -->
+                    <!-- Job Skills -->
+                    <!-- ============================= -->
+
+                    {% if result.job_skills %}
+
+                        <div class="mb-4">
+
+                            <h5 class="fw-bold">
+                                Job Skills
+                            </h5>
+
+
+                            <div class="d-flex flex-wrap gap-2">
+
+                                {% for skill in result.job_skills %}
+
+                                    <span class="badge bg-secondary p-2">
+
+                                        {{ skill }}
+
+                                    </span>
+
+                                {% endfor %}
+
+                            </div>
+
+                        </div>
+
+                    {% endif %}
+
+
+                    <!-- ============================= -->
+                    <!-- View Job -->
+                    <!-- ============================= -->
+
+                    {% if result.url and result.url != "#" %}
+
+                        <a
+                            href="{{ result.url }}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="btn btn-primary"
+                        >
+
+                            View Job
+
+                        </a>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        {% endfor %}
+
+
+    {% else %}
+
+        <div class="alert alert-warning">
+
+            <h5>
+                No matching jobs found.
+            </h5>
+
+            <p class="mb-0">
+
+                We could not find suitable online jobs
+                for the detected skills.
+
+            </p>
+
+        </div>
+
+    {% endif %}
+
+
+    <!-- ============================= -->
+    <!-- Recommended Skills -->
+    <!-- ============================= -->
+
+    <div class="card shadow-sm mt-5 mb-5">
+
+        <div class="card-body">
+
+            <h3 class="fw-bold mb-4">
+                Recommended Skills
+            </h3>
+
+
+            {% if recommendations %}
+
+                <div class="d-flex flex-wrap gap-2">
+
+                    {% for recommendation in recommendations %}
+
+                        <span class="badge bg-warning text-dark p-2">
+
+                            {{ recommendation }}
+
+                        </span>
+
+                    {% endfor %}
+
+                </div>
+
+            {% else %}
+
+                <p class="text-muted">
+
+                    No additional skills recommended.
+
+                </p>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
