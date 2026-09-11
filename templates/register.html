@@ -1,136 +1,139 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - AI Resume Analyzer</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        body {
+            background-color: #0b0f19;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 15px;
+            color: #f8fafc;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-{% block title %}
-Register | Resume AI
-{% endblock %}
+        .auth-card {
+            background-color: #1e293b;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            max-width: 950px;
+            width: 100%;
+        }
 
-{% block body %}
+        .auth-banner {
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.15) 0%, rgba(129, 140, 248, 0.15) 100%);
+            border-right: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 48px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+        .text-gradient {
+            background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
 
-<style>
-    .auth-wrapper {
-        background-color: #0b0f19;
-        min-height: calc(100vh - 70px);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 40px 15px;
-    }
+        .auth-form-container {
+            padding: 48px;
+        }
 
-    .auth-card {
-        background-color: #1e293b;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 20px;
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-        overflow: hidden;
-        max-width: 950px;
-        width: 100%;
-    }
+        .form-label {
+            color: #cbd5e1;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 6px;
+        }
 
-    .auth-banner {
-        background: linear-gradient(135deg, rgba(56, 189, 248, 0.15) 0%, rgba(129, 140, 248, 0.15) 100%);
-        border-right: 1px solid rgba(255, 255, 255, 0.08);
-        padding: 48px;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-    }
+        .input-group-text {
+            background-color: #0f172a;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-right: none;
+            color: #64748b;
+            border-top-left-radius: 10px;
+            border-bottom-left-radius: 10px;
+        }
 
-    .text-gradient {
-        background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-    }
+        .form-control {
+            background-color: #0f172a;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-left: none;
+            color: #f8fafc;
+            border-top-right-radius: 10px;
+            border-bottom-right-radius: 10px;
+            padding: 12px 16px;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+        }
 
-    .auth-form-container {
-        padding: 48px;
-    }
+        .form-control:focus {
+            background-color: #0f172a;
+            border-color: #38bdf8;
+            color: #ffffff;
+            box-shadow: none;
+        }
 
-    .form-label {
-        color: #cbd5e1;
-        font-size: 0.875rem;
-        font-weight: 500;
-        margin-bottom: 6px;
-    }
+        .form-control:focus + .input-group-text,
+        .input-group:focus-within .input-group-text {
+            border-color: #38bdf8;
+            color: #38bdf8;
+        }
 
-    .input-group-text {
-        background-color: #0f172a;
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        border-right: none;
-        color: #64748b;
-        border-top-left-radius: 10px;
-        border-bottom-left-radius: 10px;
-    }
+        .form-control::placeholder {
+            color: #475569;
+        }
 
-    .form-control {
-        background-color: #0f172a;
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        border-left: none;
-        color: #f8fafc;
-        border-top-right-radius: 10px;
-        border-bottom-right-radius: 10px;
-        padding: 12px 16px;
-        font-size: 0.95rem;
-        transition: all 0.2s ease;
-    }
+        .btn-submit {
+            background-color: #38bdf8;
+            color: #0f172a;
+            font-weight: 700;
+            border: none;
+            border-radius: 10px;
+            padding: 12px;
+            transition: all 0.3s ease;
+        }
 
-    .form-control:focus {
-        background-color: #0f172a;
-        border-color: #38bdf8;
-        color: #ffffff;
-        box-shadow: none;
-    }
+        .btn-submit:hover {
+            background-color: #7dd3fc;
+            color: #0f172a;
+            transform: translateY(-1px);
+        }
 
-    .form-control:focus + .input-group-text,
-    .input-group:focus-within .input-group-text {
-        border-color: #38bdf8;
-        color: #38bdf8;
-    }
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
 
-    .form-control::placeholder {
-        color: #475569;
-    }
+        .feature-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: rgba(56, 189, 248, 0.15);
+            color: #38bdf8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
 
-    .btn-submit {
-        background-color: #38bdf8;
-        color: #0f172a;
-        font-weight: 700;
-        border: none;
-        border-radius: 10px;
-        padding: 12px;
-        transition: all 0.3s ease;
-    }
-
-    .btn-submit:hover {
-        background-color: #7dd3fc;
-        color: #0f172a;
-        transform: translateY(-1px);
-    }
-
-    .feature-item {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        margin-bottom: 16px;
-        color: #94a3b8;
-        font-size: 0.9rem;
-    }
-
-    .feature-icon {
-        width: 32px;
-        height: 32px;
-        border-radius: 8px;
-        background: rgba(56, 189, 248, 0.15);
-        color: #38bdf8;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 0.85rem;
-    }
-</style>
-
-<div class="auth-wrapper">
     <div class="auth-card">
         <div class="row g-0">
             <!-- Left Side Banner -->
@@ -142,7 +145,7 @@ Register | Resume AI
                     <h3 class="fw-bold text-white mb-3">
                         Unlock Your Career Potential with <span class="text-gradient">AI Power</span>
                     </h3>
-                    <p class="text-dim-readable small mb-4" style="color: #94a3b8; line-height: 1.6;">
+                    <p class="small mb-4" style="color: #94a3b8; line-height: 1.6;">
                         Join thousands of job seekers who analyze their resumes and match with top tech roles automatically.
                     </p>
                 </div>
@@ -170,6 +173,18 @@ Register | Resume AI
                         <h4 class="fw-bold text-white mb-1">Create an Account</h4>
                         <p style="color: #94a3b8; font-size: 0.9rem;">Fill in your details to get started.</p>
                     </div>
+
+                    <!-- Flash Messages Display -->
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ category }} alert-dismissible fade show rounded-3 small py-2 px-3 mb-3" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close btn-close-white shadow-none" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
 
                     <form method="POST" action="{{ url_for('register') }}">
                         <div class="mb-3">
@@ -217,6 +232,8 @@ Register | Resume AI
             </div>
         </div>
     </div>
-</div>
 
-{% endblock %}
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
