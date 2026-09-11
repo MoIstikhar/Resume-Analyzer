@@ -4,172 +4,209 @@
 Home | Resume AI
 {% endblock %}
 
-
 {% block body %}
 
-<section class="hero">
+<!-- FontAwesome Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-    <div class="container">
+<style>
+    .home-wrapper {
+        background-color: #0b0f19;
+        color: #f8fafc;
+        margin-top: -1.5rem;
+        padding-bottom: 3rem;
+    }
 
-        <div class="row align-items-center">
+    .hero-container {
+        padding: 70px 0 50px;
+    }
 
-            <div class="col-lg-7">
+    .text-gradient {
+        background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
 
-                <h1 class="display-3 fw-bold">
+    .custom-hero-desc {
+        color: #e2e8f0 !important;
+        font-size: 1.15rem;
+        line-height: 1.6;
+    }
 
-                    AI Powered
+    .text-dim-readable {
+        color: #94a3b8 !important;
+    }
 
-                    <span class="text-info">
-                        Resume Analyzer
-                    </span>
+    .preview-card {
+        background-color: #1e293b;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 16px;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+    }
 
-                </h1>
+    .preview-score-box {
+        background-color: #0f172a;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+    }
 
-                <p class="lead">
+    /* Skill Badges Style */
+    .skill-badge-green {
+        background-color: rgba(16, 185, 129, 0.1);
+        color: #10b981;
+        border: 1px solid #059669;
+        padding: 6px 16px;
+        border-radius: 10px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
 
-                    Analyze your resume, discover your
-                    skills and find the jobs that match
-                    your profile.
+    .skill-badge-gray {
+        background-color: rgba(255, 255, 255, 0.05);
+        color: #ffffff;
+        border: 1px solid #475569;
+        padding: 6px 16px;
+        border-radius: 10px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
 
-                </p>
+    .feature-card {
+        background-color: #1e293b;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
+        transition: transform 0.3s ease;
+    }
 
+    .feature-card:hover {
+        transform: translateY(-5px);
+        border-color: rgba(56, 189, 248, 0.4);
+    }
+</style>
 
-                {% if current_user.is_authenticated %}
-
-                <a
-                    href="{{ url_for('upload') }}"
-                    class="btn btn-info btn-lg">
-
-                    Analyze My Resume
-
-                </a>
-
-                {% else %}
-
-                <a
-                    href="{{ url_for('register') }}"
-                    class="btn btn-info btn-lg">
-
-                    Get Started
-
-                </a>
-
-                {% endif %}
-
-            </div>
-
-
-            <div class="col-lg-5">
-
-                <div class="match-card">
-
-                    <h5>
-                        Resume Match Score
-                    </h5>
-
-                    <div class="score">
-
-                        87%
-
+<div class="home-wrapper">
+    <!-- Hero Section -->
+    <section class="hero-container">
+        <div class="container">
+            <div class="row align-items-center g-5">
+                <div class="col-lg-7">
+                    <div class="d-inline-flex align-items-center gap-2 px-3 py-1 mb-3 rounded-pill" style="background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.4); color: #38bdf8; font-size: 0.85rem; font-weight: 600;">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i> AI Powered
                     </div>
+                    
+                    <h1 class="display-4 fw-extrabold text-white mb-3" style="font-weight: 800;">
+                        AI Powered <br>
+                        <span class="text-gradient">Resume Analyzer</span>
+                    </h1>
 
-                    <p>
-                        Excellent Job Match
+                    <p class="custom-hero-desc mb-4" style="max-width: 580px;">
+                        Analyze your resume, discover your skills and find the jobs that match your profile.
                     </p>
 
-                    <span class="badge bg-success">
-                        Python
-                    </span>
-
-                    <span class="badge bg-success">
-                        Flask
-                    </span>
-
-                    <span class="badge bg-success">
-                        SQL
-                    </span>
-
+                    <div class="d-flex flex-wrap gap-3">
+                        {% if current_user.is_authenticated %}
+                            <a href="{{ url_for('upload') }}" class="btn btn-info btn-lg px-4 py-3 fw-bold text-dark" style="background-color: #38bdf8; border: none; border-radius: 10px;">
+                                <i class="fa-solid fa-cloud-arrow-up me-2"></i>Analyze My Resume
+                            </a>
+                            <a href="{{ url_for('dashboard') }}" class="btn btn-outline-light btn-lg px-4 py-3 fw-semibold" style="border-radius: 10px;">
+                                Go to Dashboard
+                            </a>
+                        {% else %}
+                            <a href="{{ url_for('register') }}" class="btn btn-info btn-lg px-4 py-3 fw-bold text-dark" style="background-color: #38bdf8; border: none; border-radius: 10px;">
+                                Get Started <i class="fa-solid fa-arrow-right ms-2 fs-6"></i>
+                            </a>
+                            <a href="{{ url_for('login') }}" class="btn btn-outline-light btn-lg px-4 py-3 fw-semibold" style="border-radius: 10px;">
+                                Sign In
+                            </a>
+                        {% endif %}
+                    </div>
                 </div>
 
-            </div>
+                <!-- Interactive Match Card Preview -->
+                <div class="col-lg-5">
+                    <div class="preview-card p-4 text-white">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="text-uppercase text-dim-readable small fw-bold" style="letter-spacing: 1px;">Live Analysis Demo</span>
+                            <span class="skill-badge-green py-1 px-2" style="font-size: 0.75rem;">
+                                <i class="fa-solid fa-circle-check"></i> ATS Ready
+                            </span>
+                        </div>
 
+                        <h5 class="fw-bold mb-3 text-white">Software Engineer Profile</h5>
+
+                        <div class="text-center py-3 my-2 preview-score-box">
+                            <div class="display-4 fw-bold mb-0" style="color: #38bdf8; font-weight: 800;">87%</div>
+                            <span class="text-dim-readable small text-uppercase fw-semibold" style="letter-spacing: 0.5px;">Resume Match Score</span>
+                        </div>
+
+                        <div class="mt-4">
+                            <div class="small text-dim-readable fw-bold mb-2" style="letter-spacing: 0.5px;">IDENTIFIED SKILLS</div>
+                            <div class="d-flex flex-wrap gap-2">
+                                <span class="skill-badge-green">
+                                    <i class="fa-solid fa-check"></i> Python
+                                </span>
+                                <span class="skill-badge-green">
+                                    <i class="fa-solid fa-check"></i> Flask
+                                </span>
+                                <span class="skill-badge-green">
+                                    <i class="fa-solid fa-check"></i> SQL
+                                </span>
+                                <span class="skill-badge-gray">
+                                    <i class="fa-solid fa-plus"></i> Docker
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="container py-5 my-2">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold text-white fs-1">How It Works</h2>
+            <p class="text-dim-readable fs-6">Transform your job search strategy in three straightforward steps.</p>
         </div>
 
-    </div>
-
-</section>
-
-
-<section class="container py-5">
-
-    <h2 class="text-center fw-bold mb-5">
-
-        How It Works
-
-    </h2>
-
-
-    <div class="row g-4">
-
-        <div class="col-md-4">
-
-            <div class="feature-card">
-
-                <h3>01</h3>
-
-                <h5>
-                    Upload Resume
-                </h5>
-
-                <p>
-                    Upload your PDF or DOCX resume.
-                </p>
-
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="feature-card p-4 h-100">
+                    <div class="display-6 fw-bold mb-3" style="color: #38bdf8;">01</div>
+                    <h5 class="fw-bold text-white mb-2">Upload Resume</h5>
+                    <p class="text-dim-readable mb-0" style="line-height: 1.6;">
+                        Upload your PDF or DOCX resume.
+                    </p>
+                </div>
             </div>
 
-        </div>
-
-
-        <div class="col-md-4">
-
-            <div class="feature-card">
-
-                <h3>02</h3>
-
-                <h5>
-                    AI Analysis
-                </h5>
-
-                <p>
-                    Our NLP system extracts your
-                    skills and analyzes your resume.
-                </p>
-
+            <div class="col-md-4">
+                <div class="feature-card p-4 h-100">
+                    <div class="display-6 fw-bold mb-3" style="color: #38bdf8;">02</div>
+                    <h5 class="fw-bold text-white mb-2">AI Analysis</h5>
+                    <p class="text-dim-readable mb-0" style="line-height: 1.6;">
+                        Our NLP system extracts your skills and analyzes your resume.
+                    </p>
+                </div>
             </div>
 
-        </div>
-
-
-        <div class="col-md-4">
-
-            <div class="feature-card">
-
-                <h3>03</h3>
-
-                <h5>
-                    Find Matching Jobs
-                </h5>
-
-                <p>
-                    Get a percentage score for every job.
-                </p>
-
+            <div class="col-md-4">
+                <div class="feature-card p-4 h-100">
+                    <div class="display-6 fw-bold mb-3" style="color: #38bdf8;">03</div>
+                    <h5 class="fw-bold text-white mb-2">Find Matching Jobs</h5>
+                    <p class="text-dim-readable mb-0" style="line-height: 1.6;">
+                        Get a percentage score for every job.
+                    </p>
+                </div>
             </div>
-
         </div>
-
-    </div>
-
-</section>
+    </section>
+</div>
 
 {% endblock %}
